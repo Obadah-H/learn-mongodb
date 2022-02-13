@@ -5,9 +5,13 @@ Start config servers (3 member replica set)
 ```
 docker-compose -f config-server/docker-compose.yaml up -d
 ```
+### Get ip addresses
+```
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' cfgsvr1 cfgsvr2 cfgsvr3
+```
 Initiate replica set
 ```
-mongo mongodb://192.168.1.81:40001
+mongo mongodb:cfgsvr1:40001
 ```
 ```
 rs.initiate(
@@ -15,9 +19,9 @@ rs.initiate(
     _id: "cfgrs",
     configsvr: true,
     members: [
-      { _id : 0, host : "192.168.1.81:40001" },
-      { _id : 1, host : "192.168.1.81:40002" },
-      { _id : 2, host : "192.168.1.81:40003" }
+      { _id : 0, host : "172.18.0.2:40001" },
+      { _id : 1, host : "172.18.0.3:40002" },
+      { _id : 2, host : "172.18.0.4:40003" }
     ]
   }
 )
@@ -39,9 +43,9 @@ rs.initiate(
   {
     _id: "shard1rs",
     members: [
-      { _id : 0, host : "192.168.1.81:50001" },
-      { _id : 1, host : "192.168.1.81:50002" },
-      { _id : 2, host : "192.168.1.81:50003" }
+      { _id : 0, host : "172.18.0.2:50001" },
+      { _id : 1, host : "172.18.0.2:50002" },
+      { _id : 2, host : "172.18.0.2:50003" }
     ]
   }
 )
